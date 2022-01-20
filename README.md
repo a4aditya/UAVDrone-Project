@@ -1,5 +1,5 @@
 ## Getting Started
-### Conda (Recommended)
+### Conda 
 
 ```bash
 # Tensorflow CPU
@@ -11,40 +11,40 @@ conda env create -f conda-gpu.yml
 conda activate yolov4-gpu
 ```
 
-## YOLOv4 Using Tensorflow (tf, .pb model)
-To implement YOLOv4 using TensorFlow, first we convert the .weights into the corresponding TensorFlow model files and then run the model.
+## Steps
+
+1. Install Requirements
 ```bash
-# Convert darknet weights to tensorflow
-## yolov4
+# Tensorflow GPU
+conda env create -f conda-gpu.yml
+conda activate yolov4-gpu
+``` 
+2. Convert Weights to Tensorflow Model
+```bash
 python save_model.py --weights ./data/yolov4.weights --output ./checkpoints/yolov4-416 --input_size 416 --model yolov4 
-
-# Run yolov4 tensorflow model
-python detect.py --weights ./checkpoints/yolov4-416 --size 416 --model yolov4 --images ./data/images/kite.jpg
-
-# Run yolov4 on video
-python detect_video.py --weights ./checkpoints/yolov4-416 --size 416 --model yolov4 --video ./data/video/video.mp4 --output ./detections/results.avi
-
-# Run yolov4 on webcam
+```
+3. Running Project on Webcam
+```bash
 python detect_video.py --weights ./checkpoints/yolov4-416 --size 416 --model yolov4 --video 0 --output ./detections/results.avi --count
 ```
-If you want to run yolov3 or yolov3-tiny change ``--model yolov3`` and .weights file in above commands.
-
-<strong>Note:</strong> You can also run the detector on multiple images at once by changing the --images flag like such ``--images "./data/images/kite.jpg, ./data/images/dog.jpg"``
 
 ## YOLOv4-Tiny using TensorFlow
+Yolov4 Tiny model is fast but shows less accuracy.
 The following commands will allow you to run yolov4-tiny model.
 ```
-# yolov4-tiny
+# convert to tensorflow model(yolov4-tiny)
 python save_model.py --weights ./data/yolov4-tiny.weights --output ./checkpoints/yolov4-tiny-416 --input_size 416 --model yolov4 --tiny
 
 # Run yolov4-tiny tensorflow model
-python detect.py --weights ./checkpoints/yolov4-tiny-416 --size 416 --model yolov4 --images ./data/images/kite.jpg --tiny
+python detect_video.py --weights ./checkpoints/yolov4-tiny-416 --size 416 --model yolov4 --video 0 --output ./detections/results.avi --count --tiny
 ```
 
 <a name="counting"/>
 
+## Counting Objects
+
 ### Counting Objects (total objects or per class)
-I have created a custom function that can be used to count and keep track of the number of objects detected at a given moment within each image or video. It can be used to count total objects found or can count number of objects detected per class.
+A custom function that can be used to count and keep track of the number of objects detected at a given moment within each image or video. It can be used to count total objects found or can count number of objects detected per class.
 
 #### Count Total Objects
 To count total objects all that is needed is to add the custom flag "--count" to your detect.py or detect_video.py command.
@@ -73,6 +73,8 @@ Running the above command will count the number of objects detected per class an
 
 <a name="info"/>
 
+## Info Command
+
 ### Print Detailed Info About Each Detection (class, confidence, bounding box coordinates)
 I have created a custom flag called <strong>INFO</strong> that can be added to any detect.py or detect_video.py commands in order to print detailed information about each detection made by the object detector. To print the detailed information to your command prompt just add the flag `--info` to any of your commands. The information on each detection includes the class, confidence in the detection and the bounding box coordinates of the detection in xmin, ymin, xmax, ymax format.
 
@@ -87,6 +89,8 @@ python detect.py --weights ./checkpoints/yolov4-416 --size 416 --model yolov4 --
 <strong>Note:</strong> You can add the --info flag to detect_video.py commands as well!
 
 <a name="crop"/>
+
+## Crop Command
 
 ### Crop Detections and Save Them as New Images
 I have created a custom function within the file core/functions.py that can be applied to any detect.py or detect_video.py commands in order to crop the YOLOv4 detections and save them each as their own new image. To crop detections all you need to do is add the `--crop` flag to any command. The resulting cropped images will be saved within the <strong>detections/crop/</strong> folder.
